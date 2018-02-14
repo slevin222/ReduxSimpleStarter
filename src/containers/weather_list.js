@@ -11,18 +11,21 @@ class WeatherList extends Component {
         console.log('cityData', cityData);
         ////check this to get more weather info
         const name = cityData.city.name;
-        const temps = cityData.list.map(weather => weather.main.temp)
-        //  , (temp) => temp-273;
+        const tempsK = cityData.list.map(weather => weather.main.temp)
+        const tempsF = tempsK.map((item, index) => {
+            return (item * 9 / 5 - 459.67).toFixed(1);
+        });
+
         const pressures = cityData.list.map(weather => weather.main.pressure);
         const humidities = cityData.list.map(weather => weather.main.humidity);
-        ///good place to convert unit data 
+
         const lon = cityData.city.coord.lon;
         const lat = cityData.city.coord.lat;
 
         return (
             <tr key={name}>
                 <td><GoogleMap lon={lon} lat={lat} /></td>
-                <td><Chart data={temps} color="orange" units="K" /></td>
+                <td><Chart data={tempsF} color="orange" units="Degrees F" /></td>
                 <td><Chart data={pressures} color="green" units="hPa" /></td>
                 <td><Chart data={humidities} color="black" units="%" /></td>
             </tr>
@@ -34,7 +37,7 @@ class WeatherList extends Component {
                 <thead>
                     <tr>
                         <th>City</th>
-                        <th>Temperature (K)</th>
+                        <th>Temperature (F)</th>
                         <th>Pressure (hPa)</th>
                         <th>Humidity (%)</th>
                     </tr>
